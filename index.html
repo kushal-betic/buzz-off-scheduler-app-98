@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VeraShield - Smart Mosquito Repellent Control</title>
+    <meta name="description" content="VeraShield Smart Mosquito Repellent Control App" />
+    <meta name="author" content="Lovable" />
+
+    <!-- PWA Manifest - Progressier -->
+    <link rel="manifest" href="https://progressier.app/ESTDAdRo7mY2oLGrJXaO/progressier.json"/>
+    <!-- PWA Manifest - Original (commented out) -->
+    <!-- <link rel="manifest" href="/manifest.json" /> -->
+    
+    <!-- iOS specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="VeraShield" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#10b981" />
+
+    <meta property="og:title" content="VeraShield - Smart Mosquito Repellent Control" />
+    <meta property="og:description" content="VeraShield Smart Mosquito Repellent Control App" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@lovable_dev" />
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <!-- Progressier Script -->
+    <script defer src="https://progressier.app/ESTDAdRo7mY2oLGrJXaO/script.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Service Worker Registration - Updated for Progressier -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/progressier.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
