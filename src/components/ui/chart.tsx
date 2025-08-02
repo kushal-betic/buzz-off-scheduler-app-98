@@ -74,25 +74,31 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
+  // Create secure CSS content without dangerouslySetInnerHTML
+  const cssContent = React.useMemo(() => {
+    return Object.entries(THEMES)
+      .map(([theme, prefix]) => {
+        const themeRules = colorConfig
+          .map(([key, itemConfig]) => {
+            const color =
+              itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+              itemConfig.color
+            // Sanitize color values to prevent CSS injection
+            const sanitizedColor = color?.replace(/[<>\"'&;(){}[\]]/g, '') || ''
+            return sanitizedColor ? `  --color-${key.replace(/[^a-zA-Z0-9-_]/g, '')}: ${sanitizedColor};` : null
+          })
+          .filter(Boolean)
+          .join("\n")
+        
+        return `${prefix} [data-chart=${id.replace(/[^a-zA-Z0-9-_]/g, '')}] {\n${themeRules}\n}`
+      })
+      .join("\n")
+  }, [id, colorConfig])
+
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
-  })
-  .join("\n")}
-}
-`
-          )
-          .join("\n"),
+        __html: cssContent,
       }}
     />
   )

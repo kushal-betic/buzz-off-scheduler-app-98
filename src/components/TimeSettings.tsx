@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Clock, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { timeValidation } from "@/utils/inputValidation";
 
 interface TimeSettingsProps {
   currentTime: string;
@@ -34,11 +35,24 @@ const TimeSettings = ({ currentTime, onTimeChange }: TimeSettingsProps) => {
   }, [isAutoSync, onTimeChange]);
 
   const handleManualTimeSet = () => {
-    onTimeChange(manualTime);
+    // Validate and sanitize time input
+    const sanitizedTime = timeValidation.sanitizeTimeInput(manualTime);
+    
+    if (!timeValidation.isValidTimeFormat(sanitizedTime) || !timeValidation.isReasonableTime(sanitizedTime)) {
+      toast({
+        title: "Invalid Time",
+        description: "Please enter a valid time in HH:MM format",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    onTimeChange(sanitizedTime);
+    setManualTime(sanitizedTime);
     setIsAutoSync(false);
     toast({
       title: "Time Updated",
-      description: `Device time set to ${manualTime}`,
+      description: `Device time set to ${sanitizedTime}`,
     });
   };
 
@@ -90,9 +104,11 @@ const TimeSettings = ({ currentTime, onTimeChange }: TimeSettingsProps) => {
               id="manual-time"
               type="time"
               value={manualTime}
-              onChange={(e) => setManualTime(e.target.value)}
+              onChange={(e) => setManualTime(timeValidation.sanitizeTimeInput(e.target.value))}
               className="flex-1"
               disabled={isAutoSync}
+              pattern="[0-9]{2}:[0-9]{2}"
+              maxLength={5}
             />
             <Button 
               onClick={handleManualTimeSet}
