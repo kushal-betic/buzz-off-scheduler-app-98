@@ -16,9 +16,8 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [deviceName, setDeviceName] = useState("");
-  const currentTime = useMemo(() => 
-    new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }), 
-    []
+  const [currentTime, setCurrentTime] = useState(() => 
+    new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
   );
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -65,7 +64,7 @@ const Index = () => {
             {/* Time Settings - Always visible */}
             <TimeSettings 
               currentTime={currentTime}
-              onTimeChange={() => {}} // Removed setState for performance
+              onTimeChange={setCurrentTime}
             />
 
             {/* Device Status */}
