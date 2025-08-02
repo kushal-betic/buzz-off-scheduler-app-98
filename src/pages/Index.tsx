@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,7 +16,10 @@ import { useToast } from "@/hooks/use-toast";
 const Index = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [deviceName, setDeviceName] = useState("");
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }));
+  const currentTime = useMemo(() => 
+    new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }), 
+    []
+  );
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -62,7 +65,7 @@ const Index = () => {
             {/* Time Settings - Always visible */}
             <TimeSettings 
               currentTime={currentTime}
-              onTimeChange={setCurrentTime}
+              onTimeChange={() => {}} // Removed setState for performance
             />
 
             {/* Device Status */}
